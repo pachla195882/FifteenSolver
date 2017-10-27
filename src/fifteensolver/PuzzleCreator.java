@@ -18,10 +18,10 @@ public final class PuzzleCreator {
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
 
     public PuzzleCreator() {
-        puzzleFiller(puzzle);
+        fillPuzzle(puzzle);
     }
 
-    private int[][] puzzleFiller(int[][] puzzle) {
+    private int[][] fillPuzzle(int[][] puzzle) {
         fillNumbersHolder();
         int counter = 0;
         for (int i = 0; i < 4; i++) {
@@ -46,7 +46,12 @@ public final class PuzzleCreator {
         for (int i = 0; i <= 15; i++) {
             getNumbersHolder().add(i);
         }
+    }
+
+    void shufflePuzzle() {
         Collections.shuffle(getNumbersHolder());
+        fillPuzzle(puzzle);
+
     }
 
     public void setNumbersHolder(ArrayList<Integer> numbersHolder) {

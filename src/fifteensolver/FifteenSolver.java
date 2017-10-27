@@ -15,8 +15,10 @@ public class FifteenSolver {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        PuzzleCreator puzzleOne = new PuzzleCreator();
-        puzzleOne.printPuzzle();
+        PuzzleCreator puzzle = new PuzzleCreator();
+        puzzle.printPuzzle();
+        puzzle.shufflePuzzle();
+        puzzle.printPuzzle();
     }
     
 }
