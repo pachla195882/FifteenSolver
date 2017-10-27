@@ -12,25 +12,48 @@ import java.util.ArrayList;
  *
  * @author radek
  */
-public class PuzzleCreator {
+public final class PuzzleCreator {
 
-    protected int[][] puzzle = new int[4][4];
-    protected ArrayList<Integer> numbersHolder = new ArrayList(16);
+    private final int[][] puzzle = new int[4][4];
+    private ArrayList<Integer> numbersHolder = new ArrayList(16);
 
     public PuzzleCreator() {
-        for (int i = 0; i <= 15; i++) {
-            numbersHolder.add(i);
-        }
-        Collections.shuffle(numbersHolder);
+        puzzleFiller(puzzle);
+    }
+
+    private int[][] puzzleFiller(int[][] puzzle) {
+        fillNumbersHolder();
         int counter = 0;
         for (int i = 0; i < 4; i++) {
-            System.out.println(" ");
             for (int j = 0; j < 4; j++) {
                 puzzle[i][j] = numbersHolder.get(counter);
                 counter++;
+            }
+        }
+        return puzzle;
+    }
+
+    public void printPuzzle() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 System.out.print(puzzle[i][j] + " ");
             }
+            System.out.println(" ");
         }
     }
 
+    void fillNumbersHolder() {
+        for (int i = 0; i <= 15; i++) {
+            getNumbersHolder().add(i);
+        }
+        Collections.shuffle(getNumbersHolder());
+    }
+
+    public void setNumbersHolder(ArrayList<Integer> numbersHolder) {
+        this.numbersHolder = numbersHolder;
+    }
+
+    public ArrayList<Integer> getNumbersHolder() {
+        return numbersHolder;
+    }
 }

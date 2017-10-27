@@ -16,6 +16,7 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzleOne = new PuzzleCreator();
+        puzzleOne.printPuzzle();
     }
     
 }
