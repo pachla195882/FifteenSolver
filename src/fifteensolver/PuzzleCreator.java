@@ -5,24 +5,32 @@
  */
 package fifteensolver;
 
-
 import java.util.Collections;
 import java.util.ArrayList;
+
 /**
  *
  * @author radek
  */
 public class PuzzleCreator {
 
-    protected ArrayList<ArrayList<Integer>> puzzle = new ArrayList(16);
+    protected int[][] puzzle = new int[4][4];
     protected ArrayList<Integer> numbersHolder = new ArrayList(16);
-    
+
     public PuzzleCreator() {
-        for(int i=0;i<=15;i++){
+        for (int i = 0; i <= 15; i++) {
             numbersHolder.add(i);
         }
         Collections.shuffle(numbersHolder);
-        //tu jeszcze trzeba dodać liczby z holdera do puzzli i już
+        int counter = 0;
+        for (int i = 0; i < 4; i++) {
+            System.out.println(" ");
+            for (int j = 0; j < 4; j++) {
+                puzzle[i][j] = numbersHolder.get(counter);
+                counter++;
+                System.out.print(puzzle[i][j] + " ");
+            }
+        }
     }
-    
+
 }
