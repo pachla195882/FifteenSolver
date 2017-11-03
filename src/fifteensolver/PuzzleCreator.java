@@ -16,6 +16,8 @@ public final class PuzzleCreator {
 
     private final int[][] puzzle = new int[4][4];
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
+    private final int X = 4;
+    private final int Y = 4;
 
     public PuzzleCreator() {
         fillPuzzle(puzzle);
