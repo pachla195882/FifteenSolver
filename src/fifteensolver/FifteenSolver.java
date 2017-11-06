@@ -5,6 +5,9 @@
  */
 package fifteensolver;
 
+import java.util.Collections;
+import java.util.ArrayList;
+
 /**
  *
  * @author radek
@@ -152,10 +155,23 @@ public class FifteenSolver {
         return false;
     }
 
+    public static boolean wasVisited(PuzzleCreator state, ArrayList<PuzzleCreator> visitedStates) {
+        for (int i = 0; i < visitedStates.size(); i++) {
+            for (int j = 0; j < 16; j++) {
+                if (visitedStates.get(i).puzzle[j].getValue() != state.puzzle[j].getValue()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static String Greed(PuzzleCreator AA) {
         String moveList = " ";
         int Min = 1000;
         //   Calculate_Avg_dist;
+        int memoryDepth = 16;
+        ArrayList<PuzzleCreator> visitedStates = new ArrayList();
         int zeroPos = 0;
         zeroPos = zero(AA);
         int prevMove = 4;
@@ -165,28 +181,49 @@ public class FifteenSolver {
         int checkedMoves = 0;
         float T = System.currentTimeMillis();
         do {
-
+            if (visitedStates.size() == memoryDepth) {
+                visitedStates.remove(0);
+            }
+            PuzzleCreator puz = AA;
+            visitedStates.add(puz);
             for (int i = 0; i < 4; i++) {
 
                 if (i > 1) {
                     if (i != prevMove - 2) {
                         if (isMoveLegal(i, zeroPos)) {
-                            checkedMoves++;
-                            Avg = calculateAvgDist(i, AA, zeroPos);
-                            if (Avg < Min) {
-                                bestMove = i;
-                                Min = Avg;
+                            PuzzleCreator Tst = AA;
+                            moveTile(zeroPos, i, Tst);
+                            System.out.println("AA:  ");
+                            AA.PrintPuzzle();
+                            System.out.println("Tst:   ");
+                            Tst.PrintPuzzle();
+                            if (!wasVisited(Tst, visitedStates)) {
+                                checkedMoves++;
+                                Avg = calculateAvgDist(i, AA, zeroPos);
+                                if (Avg < Min) {
+                                    bestMove = i;
+                                    Min = Avg;
+                                }
                             }
                         }
                     }
                 } else {
                     if (i != prevMove + 2) {
                         if (isMoveLegal(i, zeroPos)) {
-                            checkedMoves++;
-                            Avg = calculateAvgDist(i, AA, zeroPos);
-                            if (Avg < Min) {
-                                bestMove = i;
-                                Min = Avg;
+                             PuzzleCreator Tst = AA;
+                            moveTile(zeroPos, i, Tst);
+                             System.out.println("AA:  ");
+                            AA.PrintPuzzle();
+                            System.out.println("Tst:   ");
+                            Tst.PrintPuzzle();
+
+                            if (!wasVisited(Tst, visitedStates)) {
+                                checkedMoves++;
+                                Avg = calculateAvgDist(i, AA, zeroPos);
+                                if (Avg < Min) {
+                                    bestMove = i;
+                                    Min = Avg;
+                                }
                             }
                         }
                     }
@@ -209,6 +246,7 @@ public class FifteenSolver {
                     moveList = moveList + "L ";
                     break;
             }
+
             moveTile(zeroPos, bestMove, AA);
             zeroPos = zero(AA);
             prevMove = bestMove;
