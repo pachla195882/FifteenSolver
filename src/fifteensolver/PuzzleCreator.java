@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public final class PuzzleCreator {
 
-    private static Tile[] puzzle = new Tile[16]; // to raczej bedziemy zmieniac takze nie final
+    public  Tile[] puzzle = new Tile[16]; // to raczej bedziemy zmieniac takze nie final
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
     private final int x = 4;
     private final int y = 4;

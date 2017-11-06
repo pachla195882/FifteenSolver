@@ -16,9 +16,6 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzle = new PuzzleCreator();
-        puzzle.printPuzzle();
-        puzzle.shufflePuzzle();
-        puzzle.printPuzzle();
 
         String greedySolve = Greed(puzzle);
         System.out.println(greedySolve);
@@ -56,16 +53,27 @@ public class FifteenSolver {
     }
 
     public static int calculateAvgDist(int move, PuzzleCreator state) {
+        int Val ;
+        
+        int Dist = 0;
         for (int i =0;i<16;i++)
         {
-            
+            Val=  state.puzzle[i].getValue();
+            Dist +=   Math.abs(state.puzzle[i].getX()-Val%4) + Math.abs( state.puzzle[i].getY() - (int)Val/4) ; // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
         
         }
-        return 0;
+        return Dist;
     }
 
     public static boolean isSolved(PuzzleCreator state) {
-        return false;
+           int Val ;
+        for (int i =0;i<16;i++)
+        {
+             Val=  state.puzzle[i].getValue();
+            if(state.puzzle[i].getX() != Val%4 || state.puzzle[i].getY() != (int)Val/4)
+            return false;
+        }
+        return true;
     }
 
     public static String Greed(PuzzleCreator AA) {
