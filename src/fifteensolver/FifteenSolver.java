@@ -62,18 +62,19 @@ public class FifteenSolver {
             Dist +=   Math.abs(state.puzzle[i].getX()-Val%4) + Math.abs( state.puzzle[i].getY() - (int)Val/4) ; // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
         
         }
+        System.out.println(" "+Dist);
         return Dist;
     }
 
-    public static boolean isSolved(PuzzleCreator state) {
+    public static boolean notSolved(PuzzleCreator state) {
            int Val ;
         for (int i =0;i<16;i++)
         {
              Val=  state.puzzle[i].getValue();
             if(state.puzzle[i].getX() != Val%4 || state.puzzle[i].getY() != (int)Val/4)
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static String Greed(PuzzleCreator AA) {
@@ -135,11 +136,11 @@ public class FifteenSolver {
 
             prevMove = bestMove;
             Min = 100;
-
-        } while (isSolved(AA));
+          
+        } while (notSolved(AA));
 
         T = System.currentTimeMillis() - T;
 
-        return "sa";
+        return moveList;
     }
 }
