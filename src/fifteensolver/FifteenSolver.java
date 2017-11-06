@@ -170,7 +170,7 @@ public class FifteenSolver {
         String moveList = " ";
         int Min = 1000;
         //   Calculate_Avg_dist;
-        int memoryDepth = 16;
+        int memoryDepth = 50;
         ArrayList<PuzzleCreator> visitedStates = new ArrayList();
         int zeroPos = 0;
         zeroPos = zero(AA);
@@ -184,19 +184,19 @@ public class FifteenSolver {
             if (visitedStates.size() == memoryDepth) {
                 visitedStates.remove(0);
             }
-            PuzzleCreator puz = AA;
+            PuzzleCreator puz = new PuzzleCreator(AA);
             visitedStates.add(puz);
             for (int i = 0; i < 4; i++) {
 
                 if (i > 1) {
                     if (i != prevMove - 2) {
                         if (isMoveLegal(i, zeroPos)) {
-                            PuzzleCreator Tst = AA;
+                            PuzzleCreator Tst = new PuzzleCreator(AA);
                             moveTile(zeroPos, i, Tst);
-                            System.out.println("AA:  ");
-                            AA.PrintPuzzle();
-                            System.out.println("Tst:   ");
-                            Tst.PrintPuzzle();
+                //            System.out.println("AA:  ");
+                /////            AA.PrintPuzzle();
+//                            System.out.println("Tst:   ");
+//                            Tst.PrintPuzzle();
                             if (!wasVisited(Tst, visitedStates)) {
                                 checkedMoves++;
                                 Avg = calculateAvgDist(i, AA, zeroPos);
@@ -210,12 +210,12 @@ public class FifteenSolver {
                 } else {
                     if (i != prevMove + 2) {
                         if (isMoveLegal(i, zeroPos)) {
-                             PuzzleCreator Tst = AA;
+                            PuzzleCreator Tst = new PuzzleCreator(AA);
                             moveTile(zeroPos, i, Tst);
-                             System.out.println("AA:  ");
-                            AA.PrintPuzzle();
-                            System.out.println("Tst:   ");
-                            Tst.PrintPuzzle();
+                    //        System.out.println("AA:  ");
+                  //          AA.PrintPuzzle();
+//                            System.out.println("Tst:   ");
+//                            Tst.PrintPuzzle();
 
                             if (!wasVisited(Tst, visitedStates)) {
                                 checkedMoves++;
@@ -248,6 +248,8 @@ public class FifteenSolver {
             }
 
             moveTile(zeroPos, bestMove, AA);
+            System.out.println("AA:  "+ moveList);
+                          AA.PrintPuzzle();
             zeroPos = zero(AA);
             prevMove = bestMove;
             Min = 1000;

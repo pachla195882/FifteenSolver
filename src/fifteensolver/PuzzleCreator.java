@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public final class PuzzleCreator {
 
-    public  Tile[] puzzle = new Tile[16]; // to raczej bedziemy zmieniac takze nie final
+    public Tile[] puzzle = new Tile[16]; // to raczej bedziemy zmieniac takze nie final
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
     private final int x = 4;
     private final int y = 4;
@@ -24,10 +24,29 @@ public final class PuzzleCreator {
         int counter2 = -1;
         int counter = 0;
         for (int i = 0; i < 16; i++) {
-            if(i%4==0) counter2++;
-            puzzle[i] = new Tile(i-counter2*4, counter2, numbersHolder.get(counter));
-            System.out.println("X: "+puzzle[i].getX()+" "+"Y: "+puzzle[i].getY()+" "+"Val: "+puzzle[i].getValue() + " ");
+            if (i % 4 == 0) {
+                counter2++;
+            }
+            puzzle[i] = new Tile(i - counter2 * 4, counter2, numbersHolder.get(counter));
+            //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
             counter++;
+        }
+    }
+
+    public PuzzleCreator(PuzzleCreator auxiliaryPuzzle) {
+        shuffleNumbers();
+        int counter2 = -1;
+        int counter = 0;
+        for (int i = 0; i < 16; i++) {
+            if (i % 4 == 0) {
+                counter2++;
+            }
+            puzzle[i] = new Tile(i - counter2 * 4, counter2, numbersHolder.get(counter));
+            //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
+            counter++;
+        }
+        for (int i = 0; i < 16; i++) {
+            this.puzzle[i].setValue(auxiliaryPuzzle.puzzle[i].getValue());
         }
     }
 
@@ -38,11 +57,11 @@ public final class PuzzleCreator {
         Collections.shuffle(getNumbersHolder());
 
     }
-    public void PrintPuzzle(){
-        for(int i=0;i<4;i++){
-            for (int j=0;j<4;j++)
-            {
-                System.out.print(puzzle[i+j*4].getValue()+" ");
+
+    public void PrintPuzzle() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(puzzle[i + j*4 ].getValue() + " ");
             }
             System.out.println("");
         }
