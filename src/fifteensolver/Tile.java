@@ -11,37 +11,37 @@ package fifteensolver;
  */
 public class Tile {
 
-    private short x;
-    private short y;
-    private short value;
+    private int x;
+    private int y;
+    private int value;
 
-    Tile(short x, short y, short value) {
+    Tile(int x, int y, int value) {
         this.value = value;
         this.x = x;
         this.y = y;
     }
 
-    short getX() {
+    int getX() {
         return x;
     }
 
-    void setX(short x) {
+    void setX(int x) {
         this.x = x;
     }
 
-    short getY() {
+    int getY() {
         return y;
     }
 
-    void setY(short y) {
+    void setY(int y) {
         this.y = y;
     }
 
-    short getValue() {
+    int getValue() {
         return value;
     }
 
-    void setValue(short value) {
+    void setValue(int value) {
         this.value = value;
     }
 }
