@@ -11,18 +11,18 @@ package fifteensolver;
  */
 public class Greedy {
 
-}
+   
 // 0=UP
 // ma zwracac liste ruchow gdzie L-Left; R-right; U; D ;+ ilość ruchów długość znalezionego rozwiązania;
 //liczbę stanów odwiedzonych;
 //liczbę stanów przetworzonych;
 //maksymalną osiągniętą głębokość rekursji;
 //czas trwania procesu obliczeniowego.
-public OUT_Info Greedy( Tiles_array)
+public static String Greed(int Tilesy)
 {
-private String moveList; 
+private String moveList = " "; 
     private int Min = 100;
-    Calculate_Avg_dist;
+ //   Calculate_Avg_dist;
     private int Prev_move = 4;
     private int Best_move = 4;
     private int Avg = 0;
@@ -70,4 +70,5 @@ switch (Best_move) {
     T= System.currentTimeMillis() - T;
 
     return OUT_Info(checkedMoves, T, totalMoves)
+}
 }
