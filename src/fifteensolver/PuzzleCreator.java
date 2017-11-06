@@ -21,10 +21,12 @@ public final class PuzzleCreator {
 
     public PuzzleCreator() {
         shuffleNumbers();
+        int counter2 = -1;
         int counter = 0;
         for (int i = 0; i < 16; i++) {
-            puzzle[i] = new Tile(1, 1, numbersHolder.get(counter));
-            System.out.print(puzzle[i].getValue()+" ");
+            if(i%4==0) counter2++;
+            puzzle[i] = new Tile(i-counter2*4, counter2, numbersHolder.get(counter));
+            System.out.println("X: "+puzzle[i].getX()+" "+"Y: "+puzzle[i].getY()+" "+"Val: "+puzzle[i].getValue() + " ");
             counter++;
         }
     }
