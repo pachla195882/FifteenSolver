@@ -21,15 +21,46 @@ public class FifteenSolver {
         puzzle.printPuzzle();
 
         String greedySolve = Greed(puzzle);
-
+        System.out.println(greedySolve);
     }
 
-    public static boolean isMoveLegal(int move, PuzzleCreator state) {
+    public static boolean isMoveLegal(int move, int zero) {
+        switch (move) {
+                case 0:
+                    if(zero>3)
+                        return true;
+                    else
+                        return false;
+                  //  moveList = moveList + "U ";
+                  
+                case 1:
+                    if(zero ==3|| zero == 7|| zero ==11 ||zero ==15)
+                        return false;
+                    else return true;
+                    //moveList = moveList + "R ";
+                    
+                case 2:
+                    if(zero < 12)
+                        return true;
+                    else return false;
+                  //  moveList = moveList + "D ";
+                    
+                case 3:
+                    if(zero==0|| zero == 4||zero ==8||zero ==12)
+                        return false;
+                    else return true;
+                 //  moveList = moveList + "L ";
+                
+            }
         return false;
     }
 
     public static int calculateAvgDist(int move, PuzzleCreator state) {
-
+        for (int i =0;i<16;i++)
+        {
+            
+        
+        }
         return 0;
     }
 
@@ -41,6 +72,7 @@ public class FifteenSolver {
         String moveList = " ";
         int Min = 100;
         //   Calculate_Avg_dist;
+        int zeroPos = 0;
         int prevMove = 4;
         int bestMove = 4;
         int Avg = 0;
@@ -48,28 +80,32 @@ public class FifteenSolver {
         int checkedMoves = 0;
         float T = System.currentTimeMillis();
         do {
-            for (int i = 0; i < 4; i++) {
-                if (isMoveLegal(i, AA)) {
-                    if (i > 2) {
-                        if (i != prevMove - 2) {
-                            checkedMoves++;
-                            Avg = calculateAvgDist(i, AA);
-                            if (Avg < Min) {
-                                bestMove = i;
-                                Min = Avg;
-                            }
-                        }
-                    } else {
-                        if (i != prevMove + 2) {
-                            checkedMoves++;
-                            Avg = calculateAvgDist(i, AA);
-                            if (Avg < Min) {
-                                bestMove = i;
-                                Min = Avg;
-                            }
-                        }
 
+            for (int i = 0; i < 4; i++) {
+
+                if (i > 2) {
+                    if (i != prevMove - 2) {
+                        if (isMoveLegal(i, zeroPos)) {
+                            checkedMoves++;
+                            Avg = calculateAvgDist(i, AA);
+                            if (Avg < Min) {
+                                bestMove = i;
+                                Min = Avg;
+                            }
+                        }
                     }
+                } else {
+                    if (i != prevMove + 2) {
+                        if (isMoveLegal(i, zeroPos)) {
+                            checkedMoves++;
+                            Avg = calculateAvgDist(i, AA);
+                            if (Avg < Min) {
+                                bestMove = i;
+                                Min = Avg;
+                            }
+                        }
+                    }
+
                 }
 
             }
