@@ -23,56 +23,132 @@ public class FifteenSolver {
 
     public static boolean isMoveLegal(int move, int zero) {
         switch (move) {
-                case 0:
-                    if(zero>3)
-                        return true;
-                    else
-                        return false;
-                  //  moveList = moveList + "U ";
-                  
-                case 1:
-                    if(zero ==3|| zero == 7|| zero ==11 ||zero ==15)
-                        return false;
-                    else return true;
-                    //moveList = moveList + "R ";
-                    
-                case 2:
-                    if(zero < 12)
-                        return true;
-                    else return false;
-                  //  moveList = moveList + "D ";
-                    
-                case 3:
-                    if(zero==0|| zero == 4||zero ==8||zero ==12)
-                        return false;
-                    else return true;
-                 //  moveList = moveList + "L ";
-                
-            }
+            case 0:
+                if (zero > 3) {
+                    return true;
+                } else {
+                    return false;
+                }
+            //  moveList = moveList + "U ";
+
+            case 1:
+                if (zero == 3 || zero == 7 || zero == 11 || zero == 15) {
+                    return false;
+                } else {
+                    return true;
+                }
+            //moveList = moveList + "R ";
+
+            case 2:
+                if (zero < 12) {
+                    return true;
+                } else {
+                    return false;
+                }
+            //  moveList = moveList + "D ";
+
+            case 3:
+                if (zero == 0 || zero == 4 || zero == 8 || zero == 12) {
+                    return false;
+                } else {
+                    return true;
+                }
+            //  moveList = moveList + "L ";
+
+        }
         return false;
     }
 
-    public static int calculateAvgDist(int move, PuzzleCreator state) {
-        int Val ;
-        
+    public static int calculateAvgDist(int move, PuzzleCreator state, int zero) {
+        int Val;
+        int movedVal = 0;
         int Dist = 0;
-        for (int i =0;i<16;i++)
-        {
-            Val=  state.puzzle[i].getValue();
-            Dist +=   Math.abs(state.puzzle[i].getX()-Val%4) + Math.abs( state.puzzle[i].getY() - (int)Val/4) ; // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
-        
+        switch (move) {
+            case 0:
+                movedVal = zero - 4;
+                for (int i = 0; i < 16; i++) {
+
+                    Val = state.puzzle[i].getValue();
+                    if (i == movedVal) {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY()-1 - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else if (i == zero) {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY()+1 - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+                    }
+
+                }
+            //  moveList = moveList + "U ";
+
+            case 1:
+                movedVal = zero + 1;
+                for (int i = 0; i < 16; i++) {
+
+                    Val = state.puzzle[i].getValue();
+                    if (i == movedVal) {
+                        Dist += Math.abs(state.puzzle[i].getX()-1 - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else if (i == zero) {
+                        Dist += Math.abs(state.puzzle[i].getX()+1 - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+                    }
+
+                }
+            //moveList = moveList + "R ";
+
+            case 2:
+                movedVal = zero + 4;
+                for (int i = 0; i < 16; i++) {
+
+                    Val = state.puzzle[i].getValue();
+                    if (i == movedVal) {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY()+1 - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else if (i == zero) {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY()-1 - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+                    }
+
+                }
+            //  moveList = moveList + "D ";
+
+            case 3:
+                for (int i = 0; i < 16; i++) {
+
+                    Val = state.puzzle[i].getValue();
+                    if (i == movedVal) {
+                        Dist += Math.abs(state.puzzle[i].getX()+1 - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else if (i == zero) {
+                        Dist += Math.abs(state.puzzle[i].getX()-1 - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+
+                    } else {
+                        Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4); // POTENTIAL ERROR!!!!!!!!!!! (int) Val/4
+                    }
+
+                }
+                movedVal = zero - 1;
+            //  moveList = moveList + "L ";
+
         }
-        System.out.println(" "+Dist);
+
+        System.out.println(" " + Dist);
         return Dist;
     }
 
     public static boolean notSolved(PuzzleCreator state) {
-           int Val ;
-        for (int i =0;i<16;i++)
-        {
-             Val=  state.puzzle[i].getValue();
-            if(state.puzzle[i].getX() != Val%4 || state.puzzle[i].getY() != (int)Val/4)
-            return true;
+        int Val;
+        for (int i = 0; i < 16; i++) {
+            Val = state.puzzle[i].getValue();
+            if (state.puzzle[i].getX() != Val % 4 || state.puzzle[i].getY() != (int) Val / 4) {
+                return true;
+            }
         }
         return false;
     }
@@ -92,11 +168,11 @@ public class FifteenSolver {
 
             for (int i = 0; i < 4; i++) {
 
-                if (i > 2) {
+                if (i > 1) {
                     if (i != prevMove - 2) {
                         if (isMoveLegal(i, zeroPos)) {
                             checkedMoves++;
-                            Avg = calculateAvgDist(i, AA);
+                            Avg = calculateAvgDist(i, AA, zeroPos);
                             if (Avg < Min) {
                                 bestMove = i;
                                 Min = Avg;
@@ -107,7 +183,7 @@ public class FifteenSolver {
                     if (i != prevMove + 2) {
                         if (isMoveLegal(i, zeroPos)) {
                             checkedMoves++;
-                            Avg = calculateAvgDist(i, AA);
+                            Avg = calculateAvgDist(i, AA, zeroPos);
                             if (Avg < Min) {
                                 bestMove = i;
                                 Min = Avg;
@@ -136,7 +212,7 @@ public class FifteenSolver {
 
             prevMove = bestMove;
             Min = 100;
-          
+
         } while (notSolved(AA));
 
         T = System.currentTimeMillis() - T;
