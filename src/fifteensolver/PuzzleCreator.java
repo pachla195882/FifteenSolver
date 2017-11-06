@@ -14,45 +14,26 @@ import java.util.ArrayList;
  */
 public final class PuzzleCreator {
 
-    private final int[][] puzzle = new int[4][4]; // to raczej bedziemy zmieniac takze nie final
+    private static Tile[] puzzle = new Tile[16]; // to raczej bedziemy zmieniac takze nie final
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
-    private final int X = 4;
-    private final int Y = 4;
+    private final int x = 4;
+    private final int y = 4;
 
     public PuzzleCreator() {
-        fillPuzzle(puzzle);
-    }
-
-    private int[][] fillPuzzle(int[][] puzzle) {
-        fillNumbersHolder();
+        shuffleNumbers();
         int counter = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                puzzle[i][j] = numbersHolder.get(counter);
-                counter++;
-            }
-        }
-        return puzzle;
-    }
-
-    public void printPuzzle() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                System.out.print(puzzle[i][j] + " ");
-            }
-            System.out.println(" ");
+        for (int i = 0; i < 16; i++) {
+            puzzle[i] = new Tile(1, 1, numbersHolder.get(counter));
+            System.out.print(puzzle[i].getValue()+" ");
+            counter++;
         }
     }
 
-    void fillNumbersHolder() {
+    private void shuffleNumbers() {
         for (int i = 0; i <= 15; i++) {
             getNumbersHolder().add(i);
         }
-    }
-
-    void shufflePuzzle() {
         Collections.shuffle(getNumbersHolder());
-        fillPuzzle(puzzle);
 
     }
 
