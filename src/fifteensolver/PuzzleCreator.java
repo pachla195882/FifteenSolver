@@ -34,16 +34,16 @@ public final class PuzzleCreator {
     }
 
     public PuzzleCreator(PuzzleCreator auxiliaryPuzzle) {
-        shuffleNumbers();
+       // shuffleNumbers();
         int counter2 = -1;
-        int counter = 0;
+      //  int counter = 0;
         for (int i = 0; i < 16; i++) {
             if (i % 4 == 0) {
                 counter2++;
             }
-            puzzle[i] = new Tile(i - counter2 * 4, counter2, numbersHolder.get(counter));
+            puzzle[i] = new Tile(i - counter2 * 4, counter2, 0);
             //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
-            counter++;
+           // counter++;
         }
         for (int i = 0; i < 16; i++) {
             this.puzzle[i].setValue(auxiliaryPuzzle.puzzle[i].getValue());
