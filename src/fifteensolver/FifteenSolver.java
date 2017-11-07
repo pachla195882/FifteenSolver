@@ -106,7 +106,7 @@ public class FifteenSolver {
 
     public static String Greed(PuzzleCreator AA) {
         String moveList = " ";
-        int Min ;
+        int Min =50;
         //   Calculate_Avg_dist;
         int memoryDepth = 70000;
         ArrayList<PuzzleCreator> visitedStates = new ArrayList();
