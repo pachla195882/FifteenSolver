@@ -20,30 +20,44 @@ public final class PuzzleCreator {
     private final int y = 4;
 
     public PuzzleCreator() {
-        shuffleNumbers();
+       // shuffleNumbers();
         int counter2 = -1;
-        int counter = 0;
+       // int counter = 0;
         for (int i = 0; i < 16; i++) {
             if (i % 4 == 0) {
                 counter2++;
             }
-            puzzle[i] = new Tile(i - counter2 * 4, counter2, numbersHolder.get(counter));
+            puzzle[i] = new Tile(i - counter2 * 4, counter2,i);
             //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
-            counter++;
+         //   counter++;
         }
+    }
+    public void ShuffleXTimes(int X)
+    {
+        int zer = 0;
+        int move = 0;
+        for(int i =0;i<X;i++){
+        do{
+        move = (int)(Math.random()*4);
+        }
+        while(!FifteenSolver.isMoveLegal(move, zer));
+        FifteenSolver.moveTile(zer, move, this);
+        zer = FifteenSolver.zero(this);
+        }
+      
+        
     }
 
     public PuzzleCreator(PuzzleCreator auxiliaryPuzzle) {
-       // shuffleNumbers();
+       
         int counter2 = -1;
-      //  int counter = 0;
+     
         for (int i = 0; i < 16; i++) {
             if (i % 4 == 0) {
                 counter2++;
             }
             puzzle[i] = new Tile(i - counter2 * 4, counter2, 0);
-            //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
-           // counter++;
+          
         }
         for (int i = 0; i < 16; i++) {
             this.puzzle[i].setValue(auxiliaryPuzzle.puzzle[i].getValue());

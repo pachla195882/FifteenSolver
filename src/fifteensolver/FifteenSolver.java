@@ -19,7 +19,7 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzle = new PuzzleCreator();
-
+puzzle.ShuffleXTimes(10);
         String greedySolve = Greed(puzzle);
         System.out.println(greedySolve);
     }
@@ -115,7 +115,7 @@ public class FifteenSolver {
         int prevMove = 4;
         int bestMove ;
         float avgMinOverLastXMoves = 0;
-        int XSize = 1000;
+        int XSize = 10000;
         int Ticker = 0;
         int Avg ;
         int totalMoves = 0;
@@ -140,9 +140,9 @@ public class FifteenSolver {
                 AA.PrintPuzzle();
             // Ticker++; 
             
-             if (visitedStates.size() == memoryDepth) {
-                visitedStates.remove(0);
-            }
+//             if (visitedStates.size() == memoryDepth) {
+//                visitedStates.remove(0);
+//            }
              if(fallBackCounter==0){
             visitedStates.add(new PuzzleCreator(AA));
             totalMoves++;
@@ -155,14 +155,11 @@ public class FifteenSolver {
                //-----
             for (int i = 0; i < 4; i++) {
 
-              //  if (i != prevMove) {
+              
                     if (isMoveLegal(i, zeroPos)) {
                         PuzzleCreator Tst = new PuzzleCreator(AA);
                         moveTile(zeroPos, i, Tst);
-                        //            System.out.println("AA:  ");
-                        /////            AA.PrintPuzzle();
-//                            System.out.println("Tst:   ");
-//                            Tst.PrintPuzzle();
+          
                         if (!wasVisited(Tst, visitedStates)) {
                             checkedMoves++;
                             Avg = calculateAvgDist(Tst);
@@ -172,7 +169,7 @@ public class FifteenSolver {
                             }
                         }
                     }
-                //}
+             
 
             }
             if (bestMove ==4){
