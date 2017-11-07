@@ -124,17 +124,34 @@ public class FifteenSolver {
            // visitedStates.add(new PuzzleCreator(AA));
         float T = System.currentTimeMillis();
         do {
+               // Printing telemetry
+           // System.out.println("Min: " + Min + "   Total: " + totalMoves);
+           
+            if (Ticker == XSize) {
+                Ticker = 0;
+                avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize+1);
+                System.out.println("AVG:  " + avgMinOverLastXMoves + "   Total: " + totalMoves);
+                avgMinOverLastXMoves = 0;
+            } else {
+                Ticker++;
+                avgMinOverLastXMoves += Min;
+            }
+            if(totalMoves%XSize ==0)
+                AA.PrintPuzzle();
+            // Ticker++; 
             
              if (visitedStates.size() == memoryDepth) {
                 visitedStates.remove(0);
             }
-             if(fallBackCounter==0)
+             if(fallBackCounter==0){
             visitedStates.add(new PuzzleCreator(AA));
+            totalMoves++;
+             }
             //Refreshing values----
             bestMove = 4;
              Min = 1000;
                zeroPos = zero(AA);
-                totalMoves++;
+                
                //-----
             for (int i = 0; i < 4; i++) {
 
@@ -197,21 +214,7 @@ public class FifteenSolver {
             //                 AA.PrintPuzzle();
           
            
-            // Printing telemetry
-           // System.out.println("Min: " + Min + "   Total: " + totalMoves);
-           
-            if (Ticker == XSize) {
-                Ticker = 0;
-                avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize+1);
-                System.out.println("AVG:  " + avgMinOverLastXMoves + "   Total: " + totalMoves);
-                avgMinOverLastXMoves = 0;
-            } else {
-                Ticker++;
-                avgMinOverLastXMoves += Min;
-            }
-            if(totalMoves%XSize ==0)
-                AA.PrintPuzzle();
-            // Ticker++;
+         
            
 
         } while (notSolved(AA));
