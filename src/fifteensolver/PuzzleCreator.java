@@ -61,7 +61,7 @@ public final class PuzzleCreator {
     public void PrintPuzzle() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                System.out.print(puzzle[i + j*4 ].getValue() + " ");
+                System.out.print(puzzle[i*4 + j ].getValue() + " ");
             }
             System.out.println("");
         }
