@@ -5,7 +5,6 @@
  */
 package fifteensolver;
 
-import java.util.Collections;
 import java.util.ArrayList;
 
 /**
@@ -90,9 +89,7 @@ public class FifteenSolver {
         for (int i = 0; i < visitedStates.size(); i++) {
             for (int j = 0; j < 16; j++) {
                 if (visitedStates.get(i).puzzle[j].getValue() != state.puzzle[j].getValue()) {
-                    //return false;
                     break;
-
                 }
                 if (j == 15) {
                     return true;
@@ -111,7 +108,7 @@ public class FifteenSolver {
         int memoryDepth = 70000;
         ArrayList<PuzzleCreator> visitedStates = new ArrayList();
         ArrayList<PuzzleCreator> checkedStates = new ArrayList();
-        int zeroPos;
+        //int zero(actualState);
         int fallBackCounter = 0;
         int prevMove = 4;
         int bestMove;
@@ -152,14 +149,14 @@ public class FifteenSolver {
             //Refreshing values----
             bestMove = 4;
             Min = 1000;
-            zeroPos = zero(actualState);
+            //zero(actualState) = zero(actualState);
 
             //-----
             for (int i = 0; i < 4; i++) {
 
-                if (isMoveLegal(i, zeroPos)) {
+                if (isMoveLegal(i, zero(actualState))) {
                     PuzzleCreator testState = new PuzzleCreator(actualState);
-                    moveTile(zeroPos, i, testState);
+                    moveTile(zero(actualState), i, testState);
 
                     if (!wasVisited(testState, visitedStates)) {
                         checkedMoves++;
@@ -173,7 +170,7 @@ public class FifteenSolver {
 
             }
             if (bestMove == 4) {
-                System.out.println("ERROR: no bestMove found " + fallBackCounter);
+                System.out.println("ERROR: no bestMove found, going back " + fallBackCounter + " time(s)");
                 //   bestMove = prevMove;
                 totalMoves--;
 
@@ -192,20 +189,20 @@ public class FifteenSolver {
 
             switch (bestMove) {
                 case 0:
-                    moveList = moveList + "U ";
+                    moveList += "U ";
                     break;
                 case 1:
-                    moveList = moveList + "R ";
+                    moveList += "R ";
                     break;
                 case 2:
-                    moveList = moveList + "D ";
+                    moveList += "D ";
                     break;
                 case 3:
-                    moveList = moveList + "L ";
+                    moveList += "L ";
                     break;
             }
 
-            moveTile(zeroPos, bestMove, actualState);
+            moveTile(zero(actualState), bestMove, actualState);
             //  System.out.println("AA:  "+ moveList);
             //                 AA.PrintPuzzle();
 
