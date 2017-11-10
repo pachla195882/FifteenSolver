@@ -19,7 +19,6 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzle = new PuzzleCreator();
-puzzle.ShuffleXTimes(100);
         String greedySolve = Greed(puzzle);
         System.out.println(greedySolve);
     }
@@ -68,8 +67,9 @@ puzzle.ShuffleXTimes(100);
         int Val;
         for (int i = 0; i < 16; i++) {
             Val = state.puzzle[i].getValue();
-            if(Val!=0)
-            Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4);
+            if (Val != 0) {
+                Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4);
+            }
         }
         return Dist;
     }
@@ -104,93 +104,92 @@ puzzle.ShuffleXTimes(100);
         return false;
     }
 
-    public static String Greed(PuzzleCreator AA) {
+    public static String Greed(PuzzleCreator actualState) {
         String moveList = " ";
-        int Min =50;
+        int Min = 50;
         //   Calculate_Avg_dist;
         int memoryDepth = 70000;
         ArrayList<PuzzleCreator> visitedStates = new ArrayList();
+        ArrayList<PuzzleCreator> checkedStates = new ArrayList();
         int zeroPos;
-       int fallBackCounter=0;
+        int fallBackCounter = 0;
         int prevMove = 4;
-        int bestMove ;
+        int bestMove;
         float avgMinOverLastXMoves = 0;
         int XSize = 10000;
         int Ticker = 0;
-        int Avg ;
+        int Avg;
         int totalMoves = 0;
         int checkedMoves = 0;
-        
-           // visitedStates.add(new PuzzleCreator(AA));
+
+        // visitedStates.add(new PuzzleCreator(AA));
         long T = System.currentTimeMillis();
         do {
-               // Printing telemetry
-           // System.out.println("Min: " + Min + "   Total: " + totalMoves);
-           
+            // Printing telemetry
+            // System.out.println("Min: " + Min + "   Total: " + totalMoves);
+
             if (Ticker == XSize) {
                 Ticker = 0;
-                avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize+1);
+                avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
                 System.out.println("AVG:  " + avgMinOverLastXMoves + "   Total: " + totalMoves);
                 avgMinOverLastXMoves = 0;
             } else {
                 Ticker++;
                 avgMinOverLastXMoves += Min;
             }
-            if(totalMoves%XSize ==0)
-                AA.PrintPuzzle();
+            if (totalMoves % XSize == 0) {
+                actualState.PrintPuzzle();
+            }
             // Ticker++; 
-            
+
 //             if (visitedStates.size() == memoryDepth) {
 //                visitedStates.remove(0);
 //            }
-             if(fallBackCounter==0){
-            visitedStates.add(new PuzzleCreator(AA));
-            totalMoves++;
-             }
+            if (fallBackCounter == 0) {
+                visitedStates.add(new PuzzleCreator(actualState));
+                totalMoves++;
+            }
             //Refreshing values----
             bestMove = 4;
-             Min = 1000;
-               zeroPos = zero(AA);
-                
-               //-----
+            Min = 1000;
+            zeroPos = zero(actualState);
+
+            //-----
             for (int i = 0; i < 4; i++) {
 
-              
-                    if (isMoveLegal(i, zeroPos)) {
-                        PuzzleCreator Tst = new PuzzleCreator(AA);
-                        moveTile(zeroPos, i, Tst);
-          
-                        if (!wasVisited(Tst, visitedStates)) {
-                            checkedMoves++;
-                            Avg = calculateAvgDist(Tst);
-                            if (Avg < Min) {
-                                bestMove = i;
-                                Min = Avg;
-                            }
+                if (isMoveLegal(i, zeroPos)) {
+                    PuzzleCreator testState = new PuzzleCreator(actualState);
+                    moveTile(zeroPos, i, testState);
+
+                    if (!wasVisited(testState, visitedStates)) {
+                        checkedMoves++;
+                        Avg = calculateAvgDist(testState);
+                        if (Avg < Min) {
+                            bestMove = i;
+                            Min = Avg;
                         }
                     }
-             
+                }
 
             }
-            if (bestMove ==4){
-                System.out.println("ERROR: no bestMove found "+fallBackCounter);
-             //   bestMove = prevMove;
-             totalMoves--;
-            
-                AA = new PuzzleCreator(visitedStates.get(visitedStates.size()-2-fallBackCounter));
-                 fallBackCounter++;
+            if (bestMove == 4) {
+                System.out.println("ERROR: no bestMove found " + fallBackCounter);
+                //   bestMove = prevMove;
+                totalMoves--;
+
+                actualState = new PuzzleCreator(visitedStates.get(visitedStates.size() - 2 - fallBackCounter));
+                fallBackCounter++;
                 continue;
-            }
-            else
+            } else {
                 fallBackCounter = 0;
+            }
 //             if (bestMove > 1) {
 //                prevMove = bestMove - 2;
 //            } else {
 //                prevMove = bestMove + 2;
 //            }
-             // PuzzleCreator puz = ;
-           
-           
+            // PuzzleCreator puz = ;
+
             switch (bestMove) {
                 case 0:
                     moveList = moveList + "U ";
@@ -206,19 +205,19 @@ puzzle.ShuffleXTimes(100);
                     break;
             }
 
-            moveTile(zeroPos, bestMove, AA);
+            moveTile(zeroPos, bestMove, actualState);
             //  System.out.println("AA:  "+ moveList);
             //                 AA.PrintPuzzle();
-          
-          if((System.currentTimeMillis() - T)>30000 )
-         break;
-           
 
-        } while (notSolved(AA));
+            if ((System.currentTimeMillis() - T) > 30000) {
+                break;
+            }
+
+        } while (notSolved(actualState));
 
         T = System.currentTimeMillis() - T;
 
-        return moveList+ " ; Time: "+ T+ " ; CheckedStates: "+ checkedMoves + " ; TotalMoves: "+ totalMoves;
+        return moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + totalMoves;
     }
 
     public static int zero(PuzzleCreator state) {

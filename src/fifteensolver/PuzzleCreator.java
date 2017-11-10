@@ -20,7 +20,7 @@ public final class PuzzleCreator {
     String listOfMovestoState;
 
     public PuzzleCreator() {
-        // shuffleNumbers();
+        shuffleNumbers();
         int counter2 = -1;
         // int counter = 0;
         for (int i = 0; i < 16; i++) {
