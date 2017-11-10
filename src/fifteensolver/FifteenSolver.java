@@ -19,7 +19,7 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzle = new PuzzleCreator();
-puzzle.ShuffleXTimes(10);
+puzzle.ShuffleXTimes(100);
         String greedySolve = Greed(puzzle);
         System.out.println(greedySolve);
     }
@@ -122,7 +122,7 @@ puzzle.ShuffleXTimes(10);
         int checkedMoves = 0;
         
            // visitedStates.add(new PuzzleCreator(AA));
-        float T = System.currentTimeMillis();
+        long T = System.currentTimeMillis();
         do {
                // Printing telemetry
            // System.out.println("Min: " + Min + "   Total: " + totalMoves);
@@ -210,15 +210,15 @@ puzzle.ShuffleXTimes(10);
             //  System.out.println("AA:  "+ moveList);
             //                 AA.PrintPuzzle();
           
-           
-         
+          if((System.currentTimeMillis() - T)>30000 )
+         break;
            
 
         } while (notSolved(AA));
 
         T = System.currentTimeMillis() - T;
 
-        return moveList;
+        return moveList+ " ; Time: "+ T+ " ; CheckedStates: "+ checkedMoves + " ; TotalMoves: "+ totalMoves;
     }
 
     public static int zero(PuzzleCreator state) {
