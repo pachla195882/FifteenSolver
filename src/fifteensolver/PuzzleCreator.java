@@ -16,11 +16,11 @@ public final class PuzzleCreator {
 
     public Tile[] puzzle = new Tile[16];
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
-    int cost = 0;
-    String listOfMovestoState;
+   public int cost = 0;
+   public String moveList;
 
     public PuzzleCreator() {
-        shuffleNumbers();
+       // shuffleNumbers();
         int counter2 = -1;
         // int counter = 0;
         for (int i = 0; i < 16; i++) {
@@ -50,7 +50,7 @@ public final class PuzzleCreator {
 
         int counter2 = -1;
         this.cost = auxiliaryPuzzle.cost;
-        this.listOfMovestoState = auxiliaryPuzzle.listOfMovestoState;
+        this.moveList = auxiliaryPuzzle.moveList;
 
         for (int i = 0; i < 16; i++) {
             if (i % 4 == 0) {

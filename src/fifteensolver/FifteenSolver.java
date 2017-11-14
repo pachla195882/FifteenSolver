@@ -6,6 +6,7 @@
 package fifteensolver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,6 +19,7 @@ public class FifteenSolver {
      */
     public static void main(String[] args) {
         PuzzleCreator puzzle = new PuzzleCreator();
+        puzzle.ShuffleXTimes(300);
         String greedySolve = Greed(puzzle);
         System.out.println(greedySolve);
     }
@@ -66,9 +68,9 @@ public class FifteenSolver {
         int Val;
         for (int i = 0; i < 16; i++) {
             Val = state.puzzle[i].getValue();
-            if (Val != 0) {
-                Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4);
-            }
+            //if (Val != 0) {
+            Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4);
+            //}
         }
         return Dist;
     }
@@ -84,7 +86,7 @@ public class FifteenSolver {
         return false;
     }
 
-    public static boolean wasVisited(PuzzleCreator state, ArrayList<PuzzleCreator> visitedStates) {
+    public static boolean wasVisited(PuzzleCreator state, List<PuzzleCreator> visitedStates) {
 
         for (int i = 0; i < visitedStates.size(); i++) {
             for (int j = 0; j < 16; j++) {
@@ -102,53 +104,59 @@ public class FifteenSolver {
     }
 
     public static String Greed(PuzzleCreator actualState) {
-        String moveList = " ";
-        int Min = 50;
+        //  String moveList = " ";
+        int Min[] = new int[]{50, 0};
         //   Calculate_Avg_dist;
-        int memoryDepth = 70000;
-        ArrayList<PuzzleCreator> visitedStates = new ArrayList();
-        ArrayList<PuzzleCreator> checkedStates = new ArrayList();
+        //  int memoryDepth = 70000;
+        List<PuzzleCreator> visitedStates = new ArrayList();
+        List<Integer> ToExpand = new ArrayList();
+        // ArrayList<PuzzleCreator> checkedStates = new ArrayList();
         //int zero(actualState);
-        int fallBackCounter = 0;
-        int prevMove = 4;
-        int bestMove;
-        float avgMinOverLastXMoves = 0;
+        //  int fallBackCounter = 0;
+        //  int prevMove = 4;
+        //  int bestMove;
+        // float avgMinOverLastXMoves = 0;
         int XSize = 10000;
         int Ticker = 0;
-        int Avg;
+        int Avg = 5;
         int totalMoves = 0;
         int checkedMoves = 0;
+        visitedStates.add(new PuzzleCreator(actualState));
+        ToExpand.add(0);
 
         // visitedStates.add(new PuzzleCreator(AA));
         long T = System.currentTimeMillis();
         do {
+            actualState = visitedStates.get(ToExpand.get(0));
+            ToExpand.remove(0);
             // Printing telemetry
             // System.out.println("Min: " + Min + "   Total: " + totalMoves);
 
             if (Ticker == XSize) {
-                Ticker = 0;
-                avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
-                System.out.println("AVG:  " + avgMinOverLastXMoves + "   Total: " + totalMoves);
-                avgMinOverLastXMoves = 0;
+                //   Ticker = 0;
+                //   avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
+                System.out.println("AVG:  " + Avg + "   Total: " + totalMoves);
+                actualState.PrintPuzzle();
+                //   avgMinOverLastXMoves = 0;
             } else {
                 Ticker++;
-                avgMinOverLastXMoves += Min;
+                //   avgMinOverLastXMoves += Min[0];
             }
-            if (totalMoves % XSize == 0) {
-                actualState.PrintPuzzle();
-            }
+            //  if (totalMoves % XSize == 0) {
+            //       actualState.PrintPuzzle();
+            //    }
             // Ticker++; 
 
 //             if (visitedStates.size() == memoryDepth) {
 //                visitedStates.remove(0);
 //            }
-            if (fallBackCounter == 0) {
-                visitedStates.add(new PuzzleCreator(actualState));
-                totalMoves++;
-            }
+            //   if (fallBackCounter == 0) {
+            //     visitedStates.add(new PuzzleCreator(actualState));
+            //  totalMoves++;
+            //   }
             //Refreshing values----
-            bestMove = 4;
-            Min = 1000;
+            //    bestMove = 4;
+            Min[0] = 1000;
             //zero(actualState) = zero(actualState);
 
             //-----
@@ -156,30 +164,51 @@ public class FifteenSolver {
 
                 if (isMoveLegal(i, zero(actualState))) {
                     PuzzleCreator testState = new PuzzleCreator(actualState);
-                    moveTile(zero(actualState), i, testState);
+                    moveTile(zero(testState), i, testState);
 
                     if (!wasVisited(testState, visitedStates)) {
                         checkedMoves++;
+
                         Avg = calculateAvgDist(testState);
-                        if (Avg < Min) {
-                            bestMove = i;
-                            Min = Avg;
+                        testState.cost = testState.cost / 2; //cost of previous moves modification, can by changed to different value, should be further investigaerd
+                        testState.cost += Avg;
+                        visitedStates.add(new PuzzleCreator(testState));
+                        if (Avg == 0) {
+                            break;
+                        }
+                        if (ToExpand.size() == 0) {
+                            ToExpand.add(visitedStates.size() - 1);
+                        } else {
+                            for (int p = 0; p < ToExpand.size(); p++) {
+                                if (visitedStates.get(ToExpand.get(p)).cost > testState.cost) {
+                                    ToExpand.add(p, visitedStates.size() - 1);
+                                    break;
+                                }
+                                if (p == ToExpand.size() - 1) {
+                                    ToExpand.add(visitedStates.size() - 1);
+                                    break;
+                                }
+
+                            }
                         }
                     }
                 }
 
             }
-            if (bestMove == 4) {
-                System.out.println("ERROR: no bestMove found, going back " + fallBackCounter + " time(s)");
-                //   bestMove = prevMove;
-                totalMoves--;
-
-                actualState = new PuzzleCreator(visitedStates.get(visitedStates.size() - 2 - fallBackCounter));
-                fallBackCounter++;
-                continue;
-            } else {
-                fallBackCounter = 0;
+            if (Avg == 0) {
+                break;
             }
+//            if (bestMove == 4) {
+//                System.out.println("ERROR: no bestMove found, going back " + fallBackCounter + " time(s)");
+//                //   bestMove = prevMove;
+//                totalMoves--;
+//
+//                actualState = new PuzzleCreator(visitedStates.get(visitedStates.size() - 2 - fallBackCounter));
+//                fallBackCounter++;
+//                continue;
+//            } else {
+//                fallBackCounter = 0;
+//            }
 //             if (bestMove > 1) {
 //                prevMove = bestMove - 2;
 //            } else {
@@ -187,34 +216,19 @@ public class FifteenSolver {
 //            }
             // PuzzleCreator puz = ;
 
-            switch (bestMove) {
-                case 0:
-                    moveList += "U ";
-                    break;
-                case 1:
-                    moveList += "R ";
-                    break;
-                case 2:
-                    moveList += "D ";
-                    break;
-                case 3:
-                    moveList += "L ";
-                    break;
-            }
-
-            moveTile(zero(actualState), bestMove, actualState);
+            // moveTile(zero(actualState), bestMove, actualState);
             //  System.out.println("AA:  "+ moveList);
             //                 AA.PrintPuzzle();
-
             if ((System.currentTimeMillis() - T) > 30000) {
+                System.out.println("Not calculated in 30s");
                 break;
             }
 
-        } while (notSolved(actualState));
+        } while (true);
 
         T = System.currentTimeMillis() - T;
-
-        return moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + totalMoves;
+        visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
+        return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + totalMoves;
     }
 
     public static int zero(PuzzleCreator state) {
@@ -233,19 +247,24 @@ public class FifteenSolver {
             case 0:
                 state.puzzle[zero].setValue(state.puzzle[zero - 4].getValue());
                 state.puzzle[zero - 4].setValue(0);
+                state.moveList += "U ";
                 break;
             case 1:
                 state.puzzle[zero].setValue(state.puzzle[zero + 1].getValue());
                 state.puzzle[zero + 1].setValue(0);
+                state.moveList += "R ";
                 break;
             case 2:
                 state.puzzle[zero].setValue(state.puzzle[zero + 4].getValue());
                 state.puzzle[zero + 4].setValue(0);
+                state.moveList += "D ";
                 break;
             case 3:
                 state.puzzle[zero].setValue(state.puzzle[zero - 1].getValue());
                 state.puzzle[zero - 1].setValue(0);
+                state.moveList += "L ";
                 break;
         }
+
     }
 }
