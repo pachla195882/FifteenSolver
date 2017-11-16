@@ -18,10 +18,21 @@ public class FifteenSolver {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+   
+        float Avg = 0;
+        for(int zz = 0; zz< 10; zz++){
+              long T = System.currentTimeMillis();
         PuzzleCreator puzzle = new PuzzleCreator();
-        puzzle.ShuffleXTimes(300);
+        puzzle.ShuffleXTimes(10);
         String greedySolve = Greed(puzzle);
-        System.out.println(greedySolve);
+        T = System.currentTimeMillis()-T;
+        Avg +=T;
+      //  System.out.println(greedySolve);
+        
+        }
+        Avg=Avg/10;
+        System.out.println("Avg solve Time over x solves: " + Avg);
+        
     }
 
     public static boolean isMoveLegal(int move, int zero) {
@@ -74,6 +85,19 @@ public class FifteenSolver {
         }
         return Dist;
     }
+      public static int WrongTilesNum(PuzzleCreator state) {
+        int Dist = 0;
+        int Val;
+        for (int i = 0; i < 16; i++) {
+            Val = state.puzzle[i].getValue();
+            //if (Val != 0) {
+            if( Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4)!=0) ;
+            Dist++;
+            //}
+        }
+        return Dist;
+    }
+
 
     public static boolean notSolved(PuzzleCreator state) {
         int Val;
@@ -105,7 +129,7 @@ public class FifteenSolver {
 
     public static String Greed(PuzzleCreator actualState) {
         //  String moveList = " ";
-        int Min[] = new int[]{50, 0};
+       
         //   Calculate_Avg_dist;
         //  int memoryDepth = 70000;
         List<PuzzleCreator> visitedStates = new ArrayList();
@@ -123,25 +147,26 @@ public class FifteenSolver {
         int checkedMoves = 0;
         visitedStates.add(new PuzzleCreator(actualState));
         ToExpand.add(0);
-
+//actualState.PrintPuzzle();
+   //     System.out.println("-----------------------");
         // visitedStates.add(new PuzzleCreator(AA));
         long T = System.currentTimeMillis();
-        do {
+       do {
             actualState = visitedStates.get(ToExpand.get(0));
             ToExpand.remove(0);
-            // Printing telemetry
-            // System.out.println("Min: " + Min + "   Total: " + totalMoves);
-
-            if (Ticker == XSize) {
-                //   Ticker = 0;
-                //   avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
-                System.out.println("AVG:  " + Avg + "   Total: " + totalMoves);
-                actualState.PrintPuzzle();
-                //   avgMinOverLastXMoves = 0;
-            } else {
-                Ticker++;
-                //   avgMinOverLastXMoves += Min[0];
-            }
+//            // Printing telemetry
+//            // System.out.println("Min: " + Min + "   Total: " + totalMoves);
+//
+//            if (Ticker == XSize) {
+//                //   Ticker = 0;
+//                //   avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
+//                System.out.println("AVG:  " + Avg + "   Total: " + totalMoves);
+//                actualState.PrintPuzzle();
+//                //   avgMinOverLastXMoves = 0;
+//            } else {
+//                Ticker++;
+//                //   avgMinOverLastXMoves += Min[0];
+//            }
             //  if (totalMoves % XSize == 0) {
             //       actualState.PrintPuzzle();
             //    }
@@ -156,7 +181,7 @@ public class FifteenSolver {
             //   }
             //Refreshing values----
             //    bestMove = 4;
-            Min[0] = 1000;
+
             //zero(actualState) = zero(actualState);
 
             //-----
@@ -227,7 +252,8 @@ public class FifteenSolver {
         } while (true);
 
         T = System.currentTimeMillis() - T;
-        visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
+       // visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
+        totalMoves = visitedStates.get(visitedStates.size()-1).moveList.length()/2;
         return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + totalMoves;
     }
 

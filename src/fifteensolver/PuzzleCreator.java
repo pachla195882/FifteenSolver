@@ -17,7 +17,7 @@ public final class PuzzleCreator {
     public Tile[] puzzle = new Tile[16];
     private ArrayList<Integer> numbersHolder = new ArrayList(16);
    public int cost = 0;
-   public String moveList;
+   public String moveList = "";
 
     public PuzzleCreator() {
        // shuffleNumbers();
