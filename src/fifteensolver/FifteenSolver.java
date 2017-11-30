@@ -23,7 +23,7 @@ public class FifteenSolver {
 
         PuzzleCreator puzzle = new PuzzleCreator();
         puzzle.ShuffleXTimes(X);
-        String greedySolve = Greed(puzzle);
+        String greedySolve = Greedy(puzzle);
         System.out.println(greedySolve);
 
     }
@@ -112,62 +112,18 @@ public class FifteenSolver {
         return false;
     }
 
-    public static String Greed(PuzzleCreator actualState) {
-        //  String moveList = " ";
-
-        //   Calculate_Avg_dist;
-        //  int memoryDepth = 70000;
+    public static String Greedy(PuzzleCreator actualState) {
         List<PuzzleCreator> visitedStates = new ArrayList();
         List<Integer> ToExpand = new ArrayList();
-        // ArrayList<PuzzleCreator> checkedStates = new ArrayList();
-        //int zero(actualState);
-        //  int fallBackCounter = 0;
-        //  int prevMove = 4;
-        //  int bestMove;
-        // float avgMinOverLastXMoves = 0;
-        int XSize = 10000;
-        int Ticker = 0;
         int Avg = 5;
         int totalMoves = 0;
         int checkedMoves = 0;
         visitedStates.add(new PuzzleCreator(actualState));
         ToExpand.add(0);
-//actualState.PrintPuzzle();
-        //     System.out.println("-----------------------");
-        // visitedStates.add(new PuzzleCreator(AA));
         long T = System.currentTimeMillis();
         do {
             actualState = visitedStates.get(ToExpand.get(0));
             ToExpand.remove(0);
-//            // Printing telemetry
-//            // System.out.println("Min: " + Min + "   Total: " + totalMoves);
-//
-//            if (Ticker == XSize) {
-//                //   Ticker = 0;
-//                //   avgMinOverLastXMoves = avgMinOverLastXMoves / (XSize + 1);
-//                System.out.println("AVG:  " + Avg + "   Total: " + totalMoves);
-//                actualState.PrintPuzzle();
-//                //   avgMinOverLastXMoves = 0;
-//            } else {
-//                Ticker++;
-//                //   avgMinOverLastXMoves += Min[0];
-//            }
-            //  if (totalMoves % XSize == 0) {
-            //       actualState.PrintPuzzle();
-            //    }
-            // Ticker++; 
-
-//             if (visitedStates.size() == memoryDepth) {
-//                visitedStates.remove(0);
-//            }
-            //   if (fallBackCounter == 0) {
-            //     visitedStates.add(new PuzzleCreator(actualState));
-            //  totalMoves++;
-            //   }
-            //Refreshing values----
-            //    bestMove = 4;
-            //zero(actualState) = zero(actualState);
-//            -----
             for (int i = 0; i < 4; i++) {
 
                 if (isMoveLegal(i, zero(actualState))) {
@@ -206,27 +162,6 @@ public class FifteenSolver {
             if (Avg == 0) {
                 break;
             }
-//            if (bestMove == 4) {
-//                System.out.println("ERROR: no bestMove found, going back " + fallBackCounter + " time(s)");
-//                //   bestMove = prevMove;
-//                totalMoves--;
-//
-//                actualState = new PuzzleCreator(visitedStates.get(visitedStates.size() - 2 - fallBackCounter));
-//                fallBackCounter++;
-//                continue;
-//            } else {
-//                fallBackCounter = 0;
-//            }
-//             if (bestMove > 1) {
-//                prevMove = bestMove - 2;
-//            } else {
-//                prevMove = bestMove + 2;
-//            }
-            // PuzzleCreator puz = ;
-
-            // moveTile(zero(actualState), bestMove, actualState);
-            //  System.out.println("AA:  "+ moveList);
-            //                 AA.PrintPuzzle();
             if ((System.currentTimeMillis() - T) > 30000) {
                 System.out.println("Not calculated in 30s");
                 break;
@@ -235,7 +170,6 @@ public class FifteenSolver {
         } while (true);
 
         T = System.currentTimeMillis() - T;
-        // visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
         totalMoves = visitedStates.get(visitedStates.size() - 1).moveList.length() / 2;
         return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + (totalMoves - X);
     }
