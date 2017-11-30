@@ -17,57 +17,46 @@ public class FifteenSolver {
     /**
      * @param args the command line arguments
      */
+    static final int X = 20;
+
     public static void main(String[] args) {
-   
-        float Avg = 0;
-        for(int zz = 0; zz< 10; zz++){
-              long T = System.currentTimeMillis();
+
         PuzzleCreator puzzle = new PuzzleCreator();
-        puzzle.ShuffleXTimes(10);
+        puzzle.ShuffleXTimes(X);
         String greedySolve = Greed(puzzle);
-        T = System.currentTimeMillis()-T;
-        Avg +=T;
-      //  System.out.println(greedySolve);
-        
-        }
-        Avg=Avg/10;
-        System.out.println("Avg solve Time over x solves: " + Avg);
-        
+        System.out.println(greedySolve);
+
     }
 
     public static boolean isMoveLegal(int move, int zero) {
         switch (move) {
-            case 0:
+            case 0:             //UP
                 if (zero > 3) {
                     return true;
                 } else {
                     return false;
                 }
-            //  moveList = moveList + "U ";
 
-            case 1:
+            case 1:             //RIGHT
                 if (zero == 3 || zero == 7 || zero == 11 || zero == 15) {
                     return false;
                 } else {
                     return true;
                 }
-            //moveList = moveList + "R ";
 
-            case 2:
+            case 2:             //DOWN
                 if (zero < 12) {
                     return true;
                 } else {
                     return false;
                 }
-            //  moveList = moveList + "D ";
 
-            case 3:
+            case 3:             //LEFT
                 if (zero == 0 || zero == 4 || zero == 8 || zero == 12) {
                     return false;
                 } else {
                     return true;
                 }
-            //  moveList = moveList + "L ";
 
         }
         System.out.println("Error: illegal move proposed");
@@ -79,25 +68,21 @@ public class FifteenSolver {
         int Val;
         for (int i = 0; i < 16; i++) {
             Val = state.puzzle[i].getValue();
-            //if (Val != 0) {
             Dist += Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4);
-            //}
-        }
-        return Dist;
-    }
-      public static int WrongTilesNum(PuzzleCreator state) {
-        int Dist = 0;
-        int Val;
-        for (int i = 0; i < 16; i++) {
-            Val = state.puzzle[i].getValue();
-            //if (Val != 0) {
-            if( Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4)!=0) ;
-            Dist++;
-            //}
         }
         return Dist;
     }
 
+    public static int WrongTilesNum(PuzzleCreator state) {
+        int Dist = 0;
+        int Val;
+        for (int i = 0; i < 16; i++) {
+            Val = state.puzzle[i].getValue();
+            if (Math.abs(state.puzzle[i].getX() - Val % 4) + Math.abs(state.puzzle[i].getY() - (int) Val / 4) != 0) ;
+            Dist++;
+        }
+        return Dist;
+    }
 
     public static boolean notSolved(PuzzleCreator state) {
         int Val;
@@ -129,7 +114,7 @@ public class FifteenSolver {
 
     public static String Greed(PuzzleCreator actualState) {
         //  String moveList = " ";
-       
+
         //   Calculate_Avg_dist;
         //  int memoryDepth = 70000;
         List<PuzzleCreator> visitedStates = new ArrayList();
@@ -148,10 +133,10 @@ public class FifteenSolver {
         visitedStates.add(new PuzzleCreator(actualState));
         ToExpand.add(0);
 //actualState.PrintPuzzle();
-   //     System.out.println("-----------------------");
+        //     System.out.println("-----------------------");
         // visitedStates.add(new PuzzleCreator(AA));
         long T = System.currentTimeMillis();
-       do {
+        do {
             actualState = visitedStates.get(ToExpand.get(0));
             ToExpand.remove(0);
 //            // Printing telemetry
@@ -181,10 +166,8 @@ public class FifteenSolver {
             //   }
             //Refreshing values----
             //    bestMove = 4;
-
             //zero(actualState) = zero(actualState);
-
-            //-----
+//            -----
             for (int i = 0; i < 4; i++) {
 
                 if (isMoveLegal(i, zero(actualState))) {
@@ -201,7 +184,7 @@ public class FifteenSolver {
                         if (Avg == 0) {
                             break;
                         }
-                        if (ToExpand.size() == 0) {
+                        if (ToExpand.isEmpty()) {
                             ToExpand.add(visitedStates.size() - 1);
                         } else {
                             for (int p = 0; p < ToExpand.size(); p++) {
@@ -252,9 +235,9 @@ public class FifteenSolver {
         } while (true);
 
         T = System.currentTimeMillis() - T;
-       // visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
-        totalMoves = visitedStates.get(visitedStates.size()-1).moveList.length()/2;
-        return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + totalMoves;
+        // visitedStates.get(visitedStates.size() - 1).PrintPuzzle();
+        totalMoves = visitedStates.get(visitedStates.size() - 1).moveList.length() / 2;
+        return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + (totalMoves - X);
     }
 
     public static int zero(PuzzleCreator state) {

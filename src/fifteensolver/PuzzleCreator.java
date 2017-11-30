@@ -20,16 +20,12 @@ public final class PuzzleCreator {
    public String moveList = "";
 
     public PuzzleCreator() {
-       // shuffleNumbers();
         int counter2 = -1;
-        // int counter = 0;
         for (int i = 0; i < 16; i++) {
             if (i % 4 == 0) {
                 counter2++;
             }
             puzzle[i] = new Tile(i - counter2 * 4, counter2, i);
-            //System.out.println("X: " + puzzle[i].getX() + " " + "Y: " + puzzle[i].getY() + " " + "Val: " + puzzle[i].getValue() + " ");
-            //   counter++;
         }
     }
 
