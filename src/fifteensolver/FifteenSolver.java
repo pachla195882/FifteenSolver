@@ -23,9 +23,10 @@ public class FifteenSolver {
 
         PuzzleCreator puzzle = new PuzzleCreator();
         puzzle.ShuffleXTimes(X);
-        String greedySolve = Greedy(puzzle);
+        puzzle.PrintPuzzle();
+        String greedySolve = DFS(puzzle);
         System.out.println(greedySolve);
-
+        puzzle.PrintPuzzle();
     }
 
     public static boolean isMoveLegal(int move, int zero) {
@@ -172,6 +173,32 @@ public class FifteenSolver {
         T = System.currentTimeMillis() - T;
         totalMoves = visitedStates.get(visitedStates.size() - 1).moveList.length() / 2;
         return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; CheckedStates: " + checkedMoves + " ; TotalMoves: " + (totalMoves - X);
+    }
+
+    public static String DFS(PuzzleCreator actualState) {
+        List<PuzzleCreator> visitedStates = new ArrayList();
+        int totalMoves = 0;
+        long T = System.currentTimeMillis();
+        visitedStates.add(new PuzzleCreator(actualState));
+        for (int i = 0; i < 4; i++) {
+            if (isMoveLegal(i, zero(actualState))) {
+                PuzzleCreator testState = new PuzzleCreator(actualState);
+                moveTile(zero(testState), i, testState);
+                if (!wasVisited(testState, visitedStates)) {
+                    totalMoves++;
+                    visitedStates.add(new PuzzleCreator(testState));
+                    if (!notSolved(testState)) {
+                        break;
+                    }
+                    DFS(testState);
+                }
+
+            }
+
+        }
+        totalMoves = visitedStates.get(visitedStates.size() - 1).moveList.length() / 2;
+        return visitedStates.get(visitedStates.size() - 1).moveList + " ; Time: " + T + " ; totalMoves: " + (totalMoves - X);
+
     }
 
     public static int zero(PuzzleCreator state) {
