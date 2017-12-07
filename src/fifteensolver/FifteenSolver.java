@@ -17,16 +17,16 @@ public class FifteenSolver {
     /**
      * @param args the command line arguments
      */
-    static final int X = 20;
+    static final int X = 2;
 
     public static void main(String[] args) {
 
         PuzzleCreator puzzle = new PuzzleCreator();
         puzzle.ShuffleXTimes(X);
         puzzle.PrintPuzzle();
-        String greedySolve = DFS(puzzle);
-        System.out.println(greedySolve);
-        puzzle.PrintPuzzle();
+        String greedySolve = Greedy(puzzle);
+        System.out.println(greedySolve); //WAZNE wyniki sa troche zjebane, np zawsze w sekwencji ruchow masz na poczatku ruchy wykonane przy mieszaniu + na koniec 1 randomowy ruch
+      //  puzzle.PrintPuzzle();
     }
 
     public static boolean isMoveLegal(int move, int zero) {
@@ -114,6 +114,9 @@ public class FifteenSolver {
     }
 
     public static String Greedy(PuzzleCreator actualState) {
+        boolean DFS = true; //wybierz czy dfs
+        boolean BFS = false; // wybierz  czy bfs
+        // jesli oba false A*
         List<PuzzleCreator> visitedStates = new ArrayList();
         List<Integer> ToExpand = new ArrayList();
         int Avg = 5;
@@ -124,7 +127,15 @@ public class FifteenSolver {
         long T = System.currentTimeMillis();
         do {
             actualState = visitedStates.get(ToExpand.get(0));
+             if(BFS || DFS)
+                if(!notSolved(actualState))
+                {
+                    actualState.PrintPuzzle();
+                    break;
+                }
+            if(!DFS)
             ToExpand.remove(0);
+            
             for (int i = 0; i < 4; i++) {
 
                 if (isMoveLegal(i, zero(actualState))) {
@@ -133,36 +144,56 @@ public class FifteenSolver {
 
                     if (!wasVisited(testState, visitedStates)) {
                         checkedMoves++;
+                        if (!DFS && !BFS) {
+                            Avg = calculateAvgDist(testState);
+                            testState.cost = testState.cost / 2; //cost of previous moves modification, can by changed to different value, should be further investigaerd
+                            testState.cost += Avg;
 
-                        Avg = calculateAvgDist(testState);
-                        testState.cost = testState.cost / 2; //cost of previous moves modification, can by changed to different value, should be further investigaerd
-                        testState.cost += Avg;
-                        visitedStates.add(new PuzzleCreator(testState));
-                        if (Avg == 0) {
-                            break;
-                        }
-                        if (ToExpand.isEmpty()) {
-                            ToExpand.add(visitedStates.size() - 1);
-                        } else {
-                            for (int p = 0; p < ToExpand.size(); p++) {
-                                if (visitedStates.get(ToExpand.get(p)).cost > testState.cost) {
-                                    ToExpand.add(p, visitedStates.size() - 1);
-                                    break;
-                                }
-                                if (p == ToExpand.size() - 1) {
-                                    ToExpand.add(visitedStates.size() - 1);
-                                    break;
-                                }
-
+                            visitedStates.add(new PuzzleCreator(testState));
+                            if (Avg == 0) {
+                                break;
                             }
+
+                            if (ToExpand.isEmpty()) {
+                                ToExpand.add(visitedStates.size() - 1);
+                            } else {
+                                for (int p = 0; p < ToExpand.size(); p++) {
+                                    if (visitedStates.get(ToExpand.get(p)).cost > testState.cost) {
+                                        ToExpand.add(p, visitedStates.size() - 1);
+                                        break;
+                                    }
+                                    if (p == ToExpand.size() - 1) {
+                                        ToExpand.add(visitedStates.size() - 1);
+                                        break;
+                                    }
+
+                                }
+                            }
+                        }
+                        else if(DFS)
+                        {
+                           if(i == 3)
+                               ToExpand.remove(0);
+                             visitedStates.add(new PuzzleCreator(testState));
+                              ToExpand.add(0,visitedStates.size() - 1);
+                              break;
+                        }
+                        else if(BFS)
+                        {
+                             visitedStates.add(new PuzzleCreator(testState));
+                              ToExpand.add( visitedStates.size() - 1);
                         }
                     }
                 }
+                if(DFS)
+                    if(i==3)
+                        ToExpand.remove(0);
 
             }
             if (Avg == 0) {
                 break;
             }
+           
             if ((System.currentTimeMillis() - T) > 30000) {
                 System.out.println("Not calculated in 30s");
                 break;
